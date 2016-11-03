@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Three.js sceleton
+		</title>
+		<style>
+			body { 
+				margin : 0;
+			}
+			canvas { 
+				width: 100%; 
+				height: 100% 
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src="three.js/build/three.js">
+		</script>
+
+		<script>
+		
+			
+
+
+	var canvas = document.createElement('canvas');
+	var renderer = new THREE.WebGLRenderer( );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+	
+			var scene = new THREE.Scene( );
+			
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 1000 );
+			camera.position.z=20;
+			
+			
+			
+			var materialp = new THREE.MeshPhongMaterial({ color : 0x234567 });
+
+			var light = new THREE.AmbientLight(0x404040);
+			scene.add(light);
+			
+			var plane = new THREE.Mesh(new THREE.PlaneGeometry( 40, 40), materialp);
+						
+			plane.doubleSided = true;
+			plane.rotation.x = -.5 * Math.PI;  // Not sure what this number represents.
+			plane.position.y = -4;
+			plane.position.z = -5;
+
+			scene.add(plane);
+			
+			var sphere = new THREE.Mesh(new THREE.SphereGeometry(1,10,10), new THREE.MeshNormalMaterial);
+			
+			function Sphere (pos,acc,vel,r,m){
+				this.pos = pos;
+				this.acc = acc;
+				this.m = m;
+				this.vel = vel;
+				this.r = r;
+			}	
+				Sphere.prototype.move = function (dt){
+				
+					var dp = this.vel.clone();
+					var dv = this.acc.clone();
+					var np = this.pos.clone();
+					
+					dp.x = dp.x*dt;
+					dp.y = dp.y*dt;
+					dp.z = dp.z*dt;
+					
+					dv.x = dp.x*dt;
+					dv.y = dp.y*dt;
+					dv.z = dp.z*dt;
+					
+					this.vel.add(dv);
+					np.add(dp);
+					this.pos = np.clone;
+			}
+			var sphereprop = new Sphere(new THREE.Vector3( -5., 0., 0. ), new THREE.Vector3( 0., -9.81, 0. ), new THREE.Vector3( 2., 15, 0. ),1,4);
+			scene.add(sphere);
+			
+					
+			var then =( new Date( ) ).getTime( );
+					
+						
+				function render(){
+			
+				requestAnimationFrame( render );
+				
+				var now = ( new Date( ) ).getTime( );			
+
+				var dt = (now - then)/1000;
+				
+					if( dt < 1. / 60. )
+						return;	
+				 
+				then = now;
+				 
+				
+				sphereprop.move( dt );
+				sphere.position.set ( sphereprop.pos.x, sphereprop.pos.y, sphereprop.pos.z );
+				renderer.render( scene, camera );
+				
+				}
+			render();
+			
+</script>
+	</body>
+
+</html>

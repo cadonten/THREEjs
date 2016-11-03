@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Three.js sceleton
+		</title>
+		<style>
+			body { 
+				margin : 0;
+			}
+			canvas { 
+				width: 100%; 
+				height: 100% 
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src="three.js/build/three.js">
+		</script>
+
+		<script>
+		
+		
+			var scene = new THREE.Scene( );
+			
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer( );
+			
+			var materialp = new THREE.MeshPhongMaterial({ color : 0x234567 });
+
+			var plane = new THREE.Mesh(new THREE.PlaneGeometry( 40, 40), materialp);
+			
+			plane.doubleSided = true;
+			plane.rotation.x = -.5 * Math.PI;  // Not sure what this number represents.
+			plane.position.y = -4;
+			plane.position.z = -5;
+
+			scene.add( plane );			
+			
+			var ambientLight = new THREE.AmbientLight( 0x404040 );
+			
+			scene.add( ambientLight );
+
+			var light = new THREE.PointLight( 0xa0c0f0, 1, 100 );
+			
+			light.position.set( -2, -2, 0 );
+
+			scene.add( light );
+
+			var directionalLight = new THREE.DirectionalLight( 0x20ff50, 1 );
+
+			directionalLight.position.set( 0, 0, 2 ).normalize( );
+
+			scene.add( directionalLight );
+
+
+			var geom_sphere = new THREE.SphereGeometry( 1, 32, 32 );
+				
+				function Sphere(mass, vel, pos, acc, rad){
+				
+					this.mass = mass;
+					this.vel = vel;
+					this.pos = pos;
+					this.acc = acc;
+					this.rad = rad;
+					
+					}
+			
+			Sphere.prototype.move = function(dt){
+				var dp = this.vel.clone ();
+				var dv = this.acc.clone ();
+				
+					dp.multiplyScalar(dt);
+					dv.multiplyScalar(dt);
+					
+						this.vel.add(dv);
+						var np =this.pos.clone();
+						np.add(dp);
+			
+			}
+						
+			
+			var sphere = new Sphere( 1, new THREE.Vector3(0.008,0.02, 0.008), new THREE.Vector3 (0.,0.,0.), new THREE.Vector3(0.,0.00981,0.),4) 
+			
+			var mesh_sphere = new THREE.Mesh( geom_sphere, new THREE.MeshPhongMaterial( { color : 0xff6789 } ) );
+			
+			mesh_sphere.castShadow = true;
+			mesh_sphere.recieveShadow = false;
+			
+			
+			scene.add( mesh_sphere );
+		
+
+			camera.position.z = 20;
+				
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			
+			document.body.appendChild( renderer.domElement );
+			
+			var tm = 0;
+			
+			var then = ( new Date( ) ).getTime( );			
+			
+			requestAnimationFrame( render );
+		
+			function render( ) {
+			
+				
+				
+				var now = ( new Date( ) ).getTime( );			
+
+				var dt = now - then;
+		
+				if( dt < 1. / 60. )
+				
+					return;				
+				
+				then = now;
+
+				sphere.move( dt );
+				
+				sphere.vel.set( 0.0025, 0.0050, 0 );
+				mesh_sphere.position.set( sphere.pos.x,sphere.pos.y,sphere.pos.z );
+				scene.add( mesh_sphere );
+
+				renderer.render( scene, camera );
+			}
+			
+			
+</script>
+	</body>
+
+</html>

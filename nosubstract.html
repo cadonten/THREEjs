@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Three.js sceleton
+		</title>
+		<style>
+			body { 
+				margin : 0;
+			}
+			canvas { 
+				width: 100%; 
+				height: 100% 
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script src="three.js/build/three.js">
+		</script>
+		<script src="three.js/build/csg.js">
+		</script>
+		<script src="three.js/build/ThreeCSG.js">
+		</script>
+
+		
+		<script>
+		
+			
+
+
+	var canvas = document.createElement('canvas');
+	var renderer = new THREE.WebGLRenderer( );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+	
+			var scene = new THREE.Scene( );
+			
+			var camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, .1, 1000 );
+			camera.position.z=20;
+			camera.position.y = 4;
+			
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type	= THREE.PCFSoftShadowMap;
+			
+			var materialp = new THREE.MeshPhongMaterial({ color : 0x512B21 });
+			var materialx = new THREE.MeshPhongMaterial({ color : 0xFFFFFF});
+			var materialz = new THREE.MeshPhongMaterial({ color : 0x234567 });
+			
+			var plane = new THREE.Mesh(new THREE.PlaneGeometry( 40, 40), materialp);
+			plane.doubleSided = true;
+			plane.rotation.x = -.5 * Math.PI;  
+			plane.position.y = -4;
+			plane.position.z = -5;
+			var wall = new THREE.Mesh(new THREE.PlaneGeometry( 40, 40), materialx);
+			wall.doubleSided = true;
+		 
+			wall.position.y = -4;
+			wall.position.z = -20;
+			
+			plane.recieveShadow = true;
+			wall.recieveShadow=true;
+			plane.castShadow = false;
+			wall.castShadow= false;
+			scene.add( plane );	
+			scene.add( wall );	
+
+			var directionalLight = new THREE.DirectionalLight( 0xFFFFFF);
+			directionalLight.position.set( 4, 10, 8 ).normalize( );
+			
+			var directionalLight2 = new THREE.DirectionalLight( 0xFFFFFF);
+			directionalLight2.position.set( -4, -2, 8 ).normalize( );
+			
+			var spotlight = new THREE.SpotLight( 0xFFFFFF);
+			spotlight.position.set (8,0,2);
+			
+			directionalLight.shadow.camera.right     =  5;
+			directionalLight.shadow.camera.left     = -5;
+			directionalLight.shadow.camera.top      =  5;
+			directionalLight.shadow.camera.bottom   = -5;
+			
+			directionalLight.castShadow =true;
+			directionalLight2.castShadow =true;
+			spotlight.castShadow = true;
+			
+			scene.add(spotlight);
+			scene.add(directionalLight2);
+			scene.add(directionalLight);
+			
+			var outercyl = new THREE.Mesh(new THREE.CylinderGeometry(1.8,1.8,5,28,28), materialz);
+			outercyl.position.y =-1;
+			outercyl.position.z =4;
+			outercyl.position.x =0
+			
+			var geometrycsg = THREE.CSG.toCSG(outercyl);
+			
+			var innercyl = new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,4,28,28),materialz);
+			innercyl.position.y=-1;
+			innercyl.position.z= 3.5;
+			innercyl.position.x =0;
+			
+			var geometryCsg    = THREE.CSG.toCSG(innercyl);
+			
+			geometrycsg.substract(innercsg);
+			outercyl = THREE.CSG.fromCSG(geometrycsg);
+					
+			scene.add(outercyl);
+			
+			var then =( new Date( ) ).getTime( );
+			var time =0;		
+					
+				function render(){
+			
+				requestAnimationFrame( render );
+				
+				var now = ( new Date( ) ).getTime( );			
+
+				var dt = (now - then)/1000;
+				
+					if( dt < 1. / 60. )
+						return;	
+				 
+				then = now;
+				time +=dt;
+			
+		
+				renderer.render(scene,camera);
+				
+				}
+			render();
+
+
+			
+			
+</script>
+	</body>
+
+</html>
