@@ -91,7 +91,7 @@ PhysSphere.prototype.intrsSphere = function( physObj ){
 			u.multiplyScalar(Math.abs(physObj.geometry.vertices[0].x) );
 			v.multiplyScalar(Math.abs(physObj.geometry.vertices[0].y) );
 			var dist = physObj.mesh.position.clone().sub(this.mesh.position);
-			var c = n.dot.(dist);
+			var c = n.dot(dist);
 			if (c > this.parameters.radius)
 				return false;
 			
