@@ -44,16 +44,21 @@
 			var oCtl = new THREE.OrbitControls( camera );
 
 			oCtl.addEventListener( 'change', render );
-/*
+			
+			var directionalLight = new THREE.PointLight( 0xFFFFFF);
+			directionalLight.position.set(0, 8,5);
+			directionalLight.rotation.x = Math.pi/4
+			scene.add(directionalLight);
+			/*			
 			var planeTx = THREE.ImageUtils.loadTexture( 'https://media.freestocktextures.com/cache/75/63/7563017888b6aa04b6529606090fc78e.jpg' );
 					
 			planeTx.wrapT = THREE.RepeatWrapping;
 			planeTx.wrapS = THREE.RepeatWrapping;
 			planeTx.repeat.set( 10, 10 );
 			*/
-			var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshBasicMaterial( {color: 0xDF4212} ) );
+			var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( {color: 0xDF4212} ) );
 			
-			plane.rotation.x = -.45 * Math.PI;  // Not sure what this number represents.
+			plane.rotation.x = -.5 * Math.PI;  // Not sure what this number represents.
 			plane.position.x = 2;
 			plane.doubleSided = true;
 
@@ -62,7 +67,7 @@
 			var earthGeo  = new THREE.SphereGeometry( 10, 32, 32 );
 			
 			var moonGeo = new THREE.SphereGeometry( 5, 32, 32 );
-			
+			/*
 			var earthTx = THREE.ImageUtils.loadTexture( 'http://www.debacher.de/vrml/beispiele/earth2.jpg' );
 					
 			earthTx.wrapT = THREE.RepeatWrapping;
@@ -73,17 +78,17 @@
 					
 			moonTx.wrapT = THREE.RepeatWrapping;
 			moonTx.wrapS = THREE.RepeatWrapping;
-			moonTx.repeat.set( 1, 1 );
+			moonTx.repeat.set( 1, 1 );*/
 			
-			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshBasicMaterial( { /*color : 0xD2412F*/ map: moonTx } ) );
-			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshBasicMaterial( { color : 0xFF2421, map: earthTx} ) );
+			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshBasicMaterial( { color : 0xD2412F  } ) );
+			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshBasicMaterial( { color : 0xFF2421 } ) );
 			
 			scene.add( earthMesh );
 			scene.add( moonMesh );
 
-			var moonPhysics = new PhysSphere( moonMesh, false, Const.SPHERE );
-			var earthPhysics = new PhysSphere( earthMesh, false, Const.SPHERE );
-			var planePhysics = new PhysPlane( plane, true, Const.PLANE);
+			var moonPhysics = new PhysSphere( moonMesh, false, Const.SPHERE, 5 );
+			var earthPhysics = new PhysSphere( earthMesh, false, Const.SPHERE, 10 );
+			var planePhysics = new PhysPlane( plane, true, Const.PLANE, 50);
 			
 			var physics = new Physics();
 			physics.add( moonPhysics );
