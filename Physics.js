@@ -35,7 +35,7 @@ PhysObj.prototype = {
 		
 		this.mesh.position.add(dp);
 		this.vel.add(dv);
-		this.mesh.rotation.y += this.vel.x;
+		this.mesh.rotation.y += .2*this.vel.x;
 	}, 
 	accel : function(dt){
 		
