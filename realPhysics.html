@@ -63,7 +63,7 @@
 			
 			var moonGeo = new THREE.SphereGeometry( 5, 32, 32 );
 			
-			/*var earthTx = THREE.ImageUtils.loadTexture( 'http://www.debacher.de/vrml/beispiele/earth2.jpg' );
+			var earthTx = THREE.ImageUtils.loadTexture( 'http://www.debacher.de/vrml/beispiele/earth2.jpg' );
 					
 			earthTx.wrapT = THREE.RepeatWrapping;
 			earthTx.wrapS = THREE.RepeatWrapping;
@@ -74,9 +74,9 @@
 			moonTx.wrapT = THREE.RepeatWrapping;
 			moonTx.wrapS = THREE.RepeatWrapping;
 			moonTx.repeat.set( 1, 1 );
-			*/
-			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshBasicMaterial( { color : 0xD2412F } ) );
-			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshBasicMaterial( { color : 0xFF2421} ) );
+			
+			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshBasicMaterial( { /*color : 0xD2412F*/ map: moonTx } ) );
+			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshBasicMaterial( { color : 0xFF2421, map: earthTx} ) );
 			
 			scene.add( earthMesh );
 			scene.add( moonMesh );
