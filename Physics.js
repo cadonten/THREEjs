@@ -109,7 +109,7 @@ PhysSphere.prototype.intrsSphere = function( physObj ){
 			var a = u.dot(dist)/u.dot(u);
 			var b = v.dot(dist)/v.dot(v);
 					
-			if ( Math.abs(a) < .5 && Math.abs(b) < .5 ) 
+			if ( Math.abs(a) < 1. && Math.abs(b) < 1. ) 
 				return true;
 			
 			break;
