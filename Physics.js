@@ -61,8 +61,12 @@ PhysObj.prototype = {
 		
 			case Const.SPHERE : {
 					
-				if ( this.intrsSphere( physObj ) ){
+				if ( this.intrsSphere( physObj ) && physObj.typus == 1){
 					this.SpheretoPlane( physObj );
+					return;
+				}
+				else if ( this.intrsSphere( physObj) && physObj.typus == 0 ) {
+					this.SpheretoSphere( physObj );
 					return;
 				}
 			}
@@ -100,8 +104,8 @@ PhysSphere.prototype.intrsSphere = function( physObj ){
 			var v = new THREE.Vector3( e[4], e[5], e[6] );
 			var n = new THREE.Vector3( e[8], e[9], e[10] );
 			
-			u.multiplyScalar(Math.abs(physObj.mesh.geometry.vertices[0].x) );
-			v.multiplyScalar(Math.abs(physObj.mesh.geometry.vertices[0].y) );
+			u.multiplyScalar(Math.abs(physObj.mesh.geometry.vertices[0].x) + .5*this.mesh.geometry.parameters.radius );
+			v.multiplyScalar(Math.abs(physObj.mesh.geometry.vertices[0].y) + .5*this.mesh.geometry.parameters.radius );
 			var dist = physObj.mesh.position.clone().sub(this.mesh.position);
 			var c = n.dot(dist);
 			if (Math.abs(c) > this.mesh.geometry.parameters.radius || c == 0)
@@ -127,6 +131,33 @@ PhysSphere.prototype.SpheretoPlane = function ( physObj ){
 	var scale = this.vel.dot(n);
 	n.multiplyScalar(-2*scale);
 	this.vel.add(n);
+}
+
+PhysSphere.prototype.SpheretoSphere = function ( physObj ){
+	
+	var dist = this.mesh.position.clone().sub(physObj.mesh.position);
+	var distr = physObj.mesh.position.clone().sub(this.mesh.position);
+	dist.normalize();
+	distr.normalize();
+	
+	vrad1 = dist.clone().multiplyScalar( this.vel.dot(dist) );
+	vrad2 = distr.clone().multiplyScalar( physObj.vel.dot(distr) );
+	
+	var vtang1 = this.vel.clone().sub( vrad1 );
+	var vtang2 = physObj.vel.clone().sub( vrad2 );
+	
+	var crad1 = ( this.mass * vrad1.length() + physObj.mass*( 2*vrad2.length() - vrad1.length() ) )/(this.mass + physObj.mass);
+	var crad2 = ( physObj.mass * vrad2.length() + this.mass*( 2*vrad1.length() - vrad2.length() ) )/(this.mass + physObj.mass);
+	
+	vrad2.normalize().multiplyScalar(crad1);
+	vrad1.normalize().multiplyScalar(crad2);
+	
+	var vnew1 = vrad2.add( vtang1 );
+	var vnew2 = vrad1.add( vtang2 );
+	
+	this.vel = vnew1;
+	physObj.vel = vnew2;
+	this.mesh.position.x = this.mesh.position.x -.5;
 }
 
 function PhysPlane ( mesh, stc ){

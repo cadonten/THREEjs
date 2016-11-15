@@ -45,10 +45,14 @@
 
 			oCtl.addEventListener( 'change', render );
 			
-			var directionalLight = new THREE.PointLight( 0xFFFFFF);
+			var ambientLight = new THREE.AmbientLight( 0xFFFFFF);
+			ambientLight.position.set(0, 8,5);
+			
+			var directionalLight = new THREE.DirectionalLight( 0xFFFFFF);
 			directionalLight.position.set(0, 8,5);
 			directionalLight.rotation.x = Math.pi/4
 			scene.add(directionalLight);
+			scene.add(ambientLight);
 			/*			
 			var planeTx = THREE.ImageUtils.loadTexture( 'https://media.freestocktextures.com/cache/75/63/7563017888b6aa04b6529606090fc78e.jpg' );
 					
@@ -67,21 +71,21 @@
 			var earthGeo  = new THREE.SphereGeometry( 10, 32, 32 );
 			
 			var moonGeo = new THREE.SphereGeometry( 5, 32, 32 );
-			
-			var earthTx = THREE.ImageUtils.loadTexture( 'earth2.jpg' );
+			/*
+			var earthTx = THREE.ImageUtils.loadTexture( 'http://www.debacher.de/vrml/beispiele/earth2.jpg' );
 					
 			earthTx.wrapT = THREE.RepeatWrapping;
 			earthTx.wrapS = THREE.RepeatWrapping;
 			earthTx.repeat.set( 1, 1 );
 			
-			var moonTx = THREE.ImageUtils.loadTexture( '210.jpg' );
+			var moonTx = THREE.ImageUtils.loadTexture( 'http://www.uni-weimar.de/architektur/dsmbfl/blog/alotta/user/home/img/000/000//210.jpg' );
 					
 			moonTx.wrapT = THREE.RepeatWrapping;
 			moonTx.wrapS = THREE.RepeatWrapping;
-			moonTx.repeat.set( 1, 1 );
+			moonTx.repeat.set( 1, 1 );*/
 			
-			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshBasicMaterial( { map: earthTx  } ) );
-			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshBasicMaterial( { map: moonTx } ) );
+			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshPhongMaterial( { color : 0xD2412F  } ) );
+			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshPhongMaterial( { color : 0xFF2421 } ) );
 			
 			scene.add( earthMesh );
 			scene.add( moonMesh );
@@ -149,8 +153,8 @@
 			
 			function reset ( ){
 			
-				earthPhysics.init( 1, new THREE.Vector3( 25, 15, 0 ), new THREE.Vector3( -2., 0, 0 ) );
-				moonPhysics.init( 1, new THREE.Vector3( -25, 15, 0 ), new THREE.Vector3( 2., 0, 0 ) );
+				earthPhysics.init( 2, new THREE.Vector3( 26, 15, 0 ), new THREE.Vector3( -15., 0, 0 ) );
+				moonPhysics.init( 2, new THREE.Vector3( -25, 15, 0 ), new THREE.Vector3( 5., 0, 0 ) );
 			}
 
 		</script>
