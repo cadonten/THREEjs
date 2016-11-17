@@ -39,7 +39,7 @@ PhysObj.prototype = {
 	}, 
 	accel : function(dt){
 		
-		this.acc.set (0, -.8*this.mesh.position.y, 0);
+		this.acc.set (0, -98.1, 0);
 	},
 	init : function (  mass, pos, vel ){
 		this.vel = vel;
@@ -50,7 +50,7 @@ PhysObj.prototype = {
 				
 		return this.mesh.position.clone( ).sub( physObj.mesh.position ).length() < this.bound + physObj.bound  >.0001;
 	},
-	intrs : function( physObj ){
+	intrs : function( physObj, dt ){
 		
 		if ( !this.intrscBound( physObj ) ) {
 			
@@ -62,7 +62,7 @@ PhysObj.prototype = {
 			case Const.SPHERE : {
 					
 				if ( this.intrsSphere( physObj ) && physObj.typus == 1){
-					this.SpheretoPlane( physObj );
+					this.SpheretoPlane( physObj, dt );
 					return;
 				}
 				else if ( this.intrsSphere( physObj) && physObj.typus == 0 ) {
@@ -98,7 +98,7 @@ PhysSphere.prototype.intrsSphere = function( physObj ){
 			return true;
 		}
 		case Const.PLANE: {
-			
+			this.matrixAutoUpdate = true;
 			var e = physObj.mesh.matrix.elements;
 			var u = new THREE.Vector3( e[0], e[1], e[2] );
 			var v = new THREE.Vector3( e[4], e[5], e[6] );
@@ -123,7 +123,7 @@ PhysSphere.prototype.intrsSphere = function( physObj ){
 	}
 }
 
-PhysSphere.prototype.SpheretoPlane = function ( physObj ){
+PhysSphere.prototype.SpheretoPlane = function ( physObj, dt ){
 	
 	var e = physObj.mesh.matrix.elements;
 	var n = new THREE.Vector3( e[8], e[9], e[10] ).normalize();
@@ -131,6 +131,8 @@ PhysSphere.prototype.SpheretoPlane = function ( physObj ){
 	var scale = this.vel.dot(n);
 	n.multiplyScalar(-2*scale);
 	this.vel.add(n);
+	this.mesh.position.y +=1;
+	
 }
 
 PhysSphere.prototype.SpheretoSphere = function ( physObj ){
@@ -200,6 +202,7 @@ Physics.prototype = {
 		
 		for ( var i = 0; i < this.objs.length; i++ ){
 			
+			if (this.objs[i].typus != 1)
 			this.objs[i].accel(dt);
 		}
 		for ( var i = 0; i < this.objs.length; i++ ){
@@ -209,7 +212,7 @@ Physics.prototype = {
 		for ( var i = 0; i < this.objs.length; i++ ){
 			for ( var j = i+1; j < this.objs.length; j++ ){
 			
-				this.objs[i].intrs( this.objs[j] );
+				this.objs[i].intrs( this.objs[j], dt );
 			}
 		}
 	}

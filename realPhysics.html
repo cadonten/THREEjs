@@ -16,6 +16,8 @@
 	</head>
 	<body>
 		<script type="text/javascript">
+			
+			
 		
 			var run = false;
 			
@@ -53,16 +55,17 @@
 			directionalLight.rotation.x = Math.pi/4
 			scene.add(directionalLight);
 			scene.add(ambientLight);
-			/*			
-			var planeTx = THREE.ImageUtils.loadTexture( 'https://media.freestocktextures.com/cache/75/63/7563017888b6aa04b6529606090fc78e.jpg' );
+			
+			var planeTx = THREE.ImageUtils.loadTexture( 'wood.jpg' );
 					
 			planeTx.wrapT = THREE.RepeatWrapping;
 			planeTx.wrapS = THREE.RepeatWrapping;
 			planeTx.repeat.set( 10, 10 );
-			*/
-			var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( {color: 0xDF4212} ) );
+			
+			var plane = new THREE.Mesh( new THREE.PlaneGeometry( 140, 60 ), new THREE.MeshPhongMaterial( {map: planeTx ) );
 			
 			plane.rotation.x = -.5 * Math.PI;  // Not sure what this number represents.
+		
 			plane.position.x = 2;
 			plane.doubleSided = true;
 
@@ -71,21 +74,21 @@
 			var earthGeo  = new THREE.SphereGeometry( 10, 32, 32 );
 			
 			var moonGeo = new THREE.SphereGeometry( 5, 32, 32 );
-			/*
-			var earthTx = THREE.ImageUtils.loadTexture( 'http://www.debacher.de/vrml/beispiele/earth2.jpg' );
+			
+			var earthTx = THREE.ImageUtils.loadTexture( 'earth2.jpg' );
 					
 			earthTx.wrapT = THREE.RepeatWrapping;
 			earthTx.wrapS = THREE.RepeatWrapping;
 			earthTx.repeat.set( 1, 1 );
 			
-			var moonTx = THREE.ImageUtils.loadTexture( 'http://www.uni-weimar.de/architektur/dsmbfl/blog/alotta/user/home/img/000/000//210.jpg' );
+			var moonTx = THREE.ImageUtils.loadTexture( '210.jpg' );
 					
 			moonTx.wrapT = THREE.RepeatWrapping;
 			moonTx.wrapS = THREE.RepeatWrapping;
-			moonTx.repeat.set( 1, 1 );*/
+			moonTx.repeat.set( 1, 1 )
 			
-			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshPhongMaterial( { color : 0xD2412F  } ) );
-			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshPhongMaterial( { color : 0xFF2421 } ) );
+			var earthMesh = new THREE.Mesh( earthGeo, new THREE.MeshPhongMaterial( { map: earthTx  } ) );
+			var moonMesh = new THREE.Mesh( moonGeo, new THREE.MeshPhongMaterial( { map: moonTx } ) );
 			
 			scene.add( earthMesh );
 			scene.add( moonMesh );
@@ -108,7 +111,7 @@
 				now = ( new Date( ) ).getTime( ) - tm;
 				
 				var dt = 1e-3 * ( now - then);
-				
+				plane.rotation.y = .5*Math.sin (.0024*now - 3.14/3);
 				then = now;
 				requestAnimationFrame( animate );
 			
@@ -124,8 +127,6 @@
 			
 			function render( ) {
 						
-				oCtl.update( );
-
 				renderer.render( scene, camera );
 			}
 		
@@ -153,8 +154,9 @@
 			
 			function reset ( ){
 			
-				earthPhysics.init( 2, new THREE.Vector3( 26, 15, 0 ), new THREE.Vector3( -15., 0, 0 ) );
-				moonPhysics.init( 2, new THREE.Vector3( -25, 15, 0 ), new THREE.Vector3( 5., 0, 0 ) );
+				earthPhysics.init( 5, new THREE.Vector3( 40, 45, 0 ), new THREE.Vector3( 0., 0, 0 ) );
+				moonPhysics.init( 2, new THREE.Vector3( -60, 78, 2 ), new THREE.Vector3( 0., 0, 0 ) );
+			
 			}
 
 		</script>
