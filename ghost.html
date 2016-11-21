@@ -73,7 +73,7 @@
 				var sphere = new THREE.Mesh();
 				var loader = new THREE.JSONLoader();
 				loader.load('ghost.json', function(geometry) {
-				sphere = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial() );
+				sphere = new THREE.Mesh(geometry );
 				sphere.position.y = 2.;
 				sphere.position.z = 15;
 				sphere.scale.set( 2, 2, 2 );
