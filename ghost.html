@@ -68,16 +68,16 @@
 			//ramp.rotation.y = -Math.PI/4;
 
 			scene.add(ramp);
-			var sphere = null;
+			
 					// instantiate a loader
-				function initMesh() {
+			
 				var loader = new THREE.JSONLoader();
 				loader.load('ghost.json', function(geometry) {
-				sphere = new THREE.Mesh(geometry);
+				var sphere = new THREE.Mesh(geometry);
 				sphere.position.y = 2.;
 				scene.add(sphere);
 				});
-			}
+			
 				initMesh();
 			
 				function SpherePhysics (mass, rad,pos, vel){
