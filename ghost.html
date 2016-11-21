@@ -75,6 +75,8 @@
 				loader.load('ghost.json', function(geometry) {
 				sphere = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial() );
 				sphere.position.y = 2.;
+				sphere.position.z = 15;
+				sphere.scale.set( 2, 2, 2 );
 				scene.add(sphere);
 				});
 			
