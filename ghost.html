@@ -70,10 +70,10 @@
 			scene.add(ramp);
 			
 					// instantiate a loader
-			
+				var sphere = new THREE.Mesh();
 				var loader = new THREE.JSONLoader();
 				loader.load('ghost.json', function(geometry) {
-				var sphere = new THREE.Mesh(geometry);
+				sphere = new THREE.Mesh(geometry);
 				sphere.position.y = 2.;
 				scene.add(sphere);
 				});
