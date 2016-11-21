@@ -73,7 +73,7 @@
 				var sphere = new THREE.Mesh();
 				var loader = new THREE.JSONLoader();
 				loader.load('ghost.json', function(geometry) {
-				sphere = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial() );
+				sphere = new THREE.Mesh(geometry );
 				sphere.position.y = 2.;
 				sphere.position.z = 15;
 				sphere.scale.set( 2, 2, 2 );
@@ -108,7 +108,7 @@
 				
 				this.vel.add(dv);
 				this.pos.add(dp);
-				sphere.rotation.y += this.vel.x;
+				sphere.rotation.y = this.vel.x;
 				
 				if (sphere.position.y > 1){
 					this.acc.y = -9.81;
@@ -118,7 +118,7 @@
 				}
 			}
 			
-			var spherePhys1 = new SpherePhysics (5, 1, new THREE.Vector3 (0,1,5), new THREE.Vector3(0,0,0) ); 
+			var spherePhys1 = new SpherePhysics (5, 2, new THREE.Vector3 (0,1,5), new THREE.Vector3(0,0,0) ); 
 					
 			SpherePhysics.prototype.hit = function ( physObj ){
 			
