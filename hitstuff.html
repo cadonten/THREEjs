@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html onmousedown="zmove()" lang="de">
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Fall
+		</title>
+		<style>
+			body { 
+				margin : 0;
+			}
+			canvas { 
+				width: 90%; 
+				height: 90% 
+			}
+		</style>
+	</head>
+
+	<body>
+		<span id="info">hlfe</span>
+
+		<script src="https://threejs.org/build/three.js">
+		</script>
+		
+		<script src="blocks.js">
+		</script>
+		
+		<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+		</script>
+
+		<audio> <source src="audio.wav"> </audio>
+		
+		<script>
+		
+			'use strict'
+		
+			var scene = new THREE.Scene( );
+			
+			var camera = new THREE.PerspectiveCamera ( 60, window.innerWidth / window.innerHeight, .2, 1000 );
+			camera.position.set( 0, 20, 150 );		
+			camera.lookAt(0,0,0);
+			scene.add(camera);
+			var renderer = new THREE.WebGLRenderer( );
+			
+			/*var planeTex = THREE.ImageUtils.loadTexture( 'pics/planeschach.jpg' );
+			planeTexpl.wrapT = THREE.RepeatWrapping;  
+			planeTex.wrapS = THREE.RepeatWrapping;  
+			planeTex.repeat.set( 10, 10 );*/
+		
+			
+			var light = new THREE.PointLight(0xFFFFFF);
+			light.position.set(0,0,10);
+			scene.add(light);
+			
+						
+			var directionalLight = new THREE.DirectionalLight( 0xFFFFFF);
+			directionalLight.position.set(0, 8,5);
+			directionalLight.rotation.x = Math.pi/4
+			scene.add(directionalLight);
+			
+			var posx = 0;
+			var posy = 0;
+				
+			function show_position (event) {
+			
+				var x = document.all ? event.offsetX : event.pageX;
+				var y = document.all ? event.offsetY : event.pageY;
+				x = ( x - 1330/2)/10;
+				y = ( 626/2 - y )/10;
+				posx = x;
+				posy = y;
+				var out = 'Mausposition: ' + x + ', ' + y;
+				document.getElementById ('info').firstChild.data = out;
+			}
+			
+			var move = 0;
+			
+			function zmove (){
+					move = 1;
+			}
+			
+			document.body.onmousemove = show_position;
+			
+			var sphere = new THREE.Mesh( new THREE.CylinderGeometry(3, 2, 30 , 100, 100, false), new THREE.MeshPhongMaterial( { color : 0xD2412F  } ) ) ;
+			sphere.position.z = 40;
+			sphere.rotation.z = Math.PI/2;
+			sphere.geometry.translate( 0, 15, 0 );
+			scene.add (sphere);
+		
+			var ball = new THREE.Mesh ( new THREE.SphereGeometry(2,32,32), new THREE.MeshPhongMaterial ({color: 0xDDD212}) );
+			ball.position.set(-20,0,-20);
+			scene.add(ball);
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			
+			
+			function SpherePhysics (mass, rad,pos, vel){
+			
+				this.test=0;
+				this.mass = mass;
+				this.pos = pos;
+				this.vel = vel;
+				this.acc = new THREE.Vector3(0,0,0);
+				this.rad = rad;
+				
+			}
+			
+			SpherePhysics.prototype.move = function (dt) {
+				
+				var dv = this.acc.clone();
+				var dp = this.vel.clone();
+	
+				dp.multiplyScalar(dt);
+				dv.multiplyScalar(dt);
+				
+				this.vel.add(dv);
+				this.pos.add(dp);
+			}
+			
+			SpherePhysics.prototype.collision = function (temp ) {
+			
+			var e = sphere.matrix.elements;
+			var vecthroughZyl = new THREE.Vector3 (e[4], e[5], e[6] );
+			vecthroughZyl.normalize().multiplyScalar(30);
+			//vecthroughZyl.add (sphere.position);
+			
+			var dist = this.pos.clone().sub(sphere.position);
+			var b = Math.abs( dist.dot(vecthroughZyl)/vecthroughZyl.dot(vecthroughZyl) );
+			
+			vecthroughZyl.multiplyScalar(b);
+			vecthroughZyl.add(sphere.position);
+			var h = this.pos.clone().sub(vecthroughZyl);
+			
+			if (h.length() < 3){
+				document.getElementsByTagName("audio")[0].play();
+				this.vel = h.multiplyScalar(8+temp);
+			}
+			
+			}
+			
+			var spherePhys1 = new SpherePhysics (1, 2, new THREE.Vector3 (-20,0,-20), new THREE.Vector3(0,0,15) );
+
+			
+			
+			
+			
+			document.body.appendChild( renderer.domElement );
+			var oc = new THREE.OrbitControls( camera, renderer.domElement );
+			
+			//oc.addEventListener( "change", render );
+			var then =( new Date( ) ).getTime( );
+			var time = 0;
+			function render( ) {
+
+				requestAnimationFrame( render );
+				var now =( new Date( ) ).getTime( );
+				var dt = (now-then)*0.001;
+				then = now;
+				if (dt >1/30)
+					return;
+				
+				time += dt; 
+				var tempo = new THREE.Vector3(sphere.rotation.x, sphere.rotation.y, sphere.rotation.z);
+				
+				sphere.rotation.y = posx/10;
+				sphere.rotation.z = posy/10;
+				
+				tempo.sub(sphere.rotation);
+				tempo.multiplyScalar(1/dt);
+				var temp = tempo.length();
+				
+				spherePhys1.move(dt);
+				spherePhys1.collision(temp);
+				ball.position.set (spherePhys1.pos.x, spherePhys1.pos.y, spherePhys1.pos.z);
+				
+				renderer.render( scene, camera );
+			
+			}
+			render();
+			
+		</script>
+
+	</body>
+
+</html>
