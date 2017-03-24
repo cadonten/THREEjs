@@ -19,7 +19,7 @@
 
 	<body>
 		<p> Polynom-Plotter</p>
-		<p id = 'anweisung'> Polynomgrad eingeben</p>
+		<p id = 'anweisung'> Anzahl der Unbekannten eingeben</p>
 		<input id = "funktion" >
 		<button id = "create" onclick="makefield()" > Create </button>
 		<button id = "calc" onclick="draw()" > Draw </button>
@@ -60,26 +60,52 @@
 							
 						var text = document.createElement('p');
 						var b = number-i;
-						var t = document.createTextNode("x^" + b);
+						var t = document.createTextNode("x^" + b+ "  ");
 						text.appendChild(t);
 						document.body.appendChild(t);									
 					}
 			}
 			
 			function draw(){
+				
+				var zoomfac = 40;
+				
+				var br = document.createElement('br');
+				document.body.appendChild(br);
+				
+				var zoom = document.createElement('button');
+				document.body.appendChild(zoom);
+				zoom.id  = "zoom";
+				document.getElementById('zoom').innerHTML= 'zoom in';
+				
+				var zoom2 = document.createElement('button');
+				document.body.appendChild(zoom2);
+				zoom2.id  = "zoom2";
+				document.getElementById('zoom2').innerHTML= 'zoom out';
+				
+				var root = document.createElement('button');
+				document.body.appendChild(root);
+				root.id  = "root";
+				document.getElementById('root').innerHTML= 'root';
+				
+				document.getElementById('zoom').onclick = function(){
+					if (zoomfac >= 5 )
+						zoomfac -= 5;
+				}
+				
+				document.getElementById('zoom2').onclick = function(){
+					if (zoomfac <= 200 )
+						zoomfac += 5;
+				}
+				
 				var scene = new THREE.Scene( );
 			
 				var camera = new THREE.PerspectiveCamera ( 60, window.innerWidth / window.innerHeight, .2, 1000 );
-				camera.position.set( 0, 0, 80 );		
+				camera.position.set( 0, 0, zoomfac );		
 				camera.lookAt(0,0,0);
 				var renderer = new THREE.WebGLRenderer( );
 				
-				/*var planeTex = THREE.ImageUtils.loadTexture( 'pics/planeschach.jpg' );
-				planeTexpl.wrapT = THREE.RepeatWrapping;  
-				planeTex.wrapS = THREE.RepeatWrapping;  
-				planeTex.repeat.set( 10, 10 );*/
 				
-		
 				var light = new THREE.PointLight(0xFFFFFF);
 				light.position.set(0,0,0);
 				light.rotation.y = Math.PI/2;
@@ -119,6 +145,34 @@
 						geometry.vertices.push(new THREE.Vector3(x, y, z));
 					};
 			
+			
+				document.getElementById('root').onclick = function(){
+				var n = 1;
+				for (var i=0; i<=10000; i++){
+					var a = .01*(i-5000);
+					var b = 0;
+					
+						for (var j = 0; j<=number; j++){
+							
+								if (j!=number){
+									var b1 = a;
+									for ( var k =j; k<=number-2; k++){
+										var b1 = b1*a
+									}
+									b1 = b1*parseFloat(document.getElementById(String.fromCharCode(97+j) ).value );
+							
+									b += b1;
+								}
+								else 
+								b += parseFloat(document.getElementById(String.fromCharCode(97+j) ).value );
+							}
+						if ( Math.abs(b) <0.0001){
+							alert ('x' + n + ' =' + a);
+							n++;
+						}
+					};
+				}
+
 				var pointCloud = new THREE.Line(geometry, material);
 				scene.add(pointCloud);	
 				
@@ -126,15 +180,15 @@
 				
 				var Xgeometry = new THREE.Geometry();
 				Xgeometry.vertices.push(
-				new THREE.Vector3( 100, 0, 0 ),
-				new THREE.Vector3( -100, 0, 0 )
+				new THREE.Vector3( 500, 0, 0 ),
+				new THREE.Vector3( -500, 0, 0 )
 				);
 				
 			
 				var Ygeometry = new THREE.Geometry();
 				Ygeometry.vertices.push(
-				new THREE.Vector3( 0, 50, 0 ),
-				new THREE.Vector3( 0, -50, 0 )
+				new THREE.Vector3( 0, 500, 0 ),
+				new THREE.Vector3( 0, -500, 0 )
 				);
 			
 
@@ -163,7 +217,9 @@
 					if (dt >1/30)
 						return;
 						
-						
+					camera.position.set (0,0,zoomfac);
+					
+					
 					
 						
 					renderer.render( scene, camera );
