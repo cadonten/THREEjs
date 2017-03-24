@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Move it
+		</title>
+		<style>
+			body { 
+				margin : 0;
+			}
+			canvas { 
+				width: 90%; 
+				height: 90% 
+			}
+		</style>
+	</head>
+
+	<body>
+		<p> Polynom-Plotter</p>
+		<p id = 'anweisung'> Anzahl der Unbekannten eingeben</p>
+		<input id = "funktion" >
+		<button id = "create" onclick="makefield()" > Create </button>
+		<button id = "calc" onclick="draw()" > Draw </button>
+		<script src="https://threejs.org/build/three.js">
+		</script>
+		<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+		</script>
+
+		<script>
+		
+			'use strict'
+		
+			
+			
+			//var ball = new THREE.Mesh ( new THREE.SphereGeometry (10,20,20),  new THREE.MeshPhongMaterial ({color: 0xD1221F}) );
+			//scene.add(ball);
+			
+		
+			
+			
+			
+			function makefield (){
+			
+			var number = parseInt(funktion.value);
+			document.getElementById('anweisung').innerHTML= 'Koeffizienten eingeben';
+					var text = document.createElement('p');
+						var b = number-i;
+						var t = document.createTextNode("  f(x) =");
+						text.appendChild(t);
+						document.body.appendChild(t);
+			
+					for (var i=0; i<=number; i++){
+						
+						var Input = document.createElement('input');
+							document.body.appendChild(Input);
+							Input.id=String.fromCharCode(97+i);
+							Input.size = 4;
+							
+						var text = document.createElement('p');
+						var b = number-i;
+						var t = document.createTextNode("x^" + b);
+						text.appendChild(t);
+						document.body.appendChild(t);									
+					}
+			}
+			
+			function draw(){
+				var scene = new THREE.Scene( );
+			
+				var camera = new THREE.PerspectiveCamera ( 60, window.innerWidth / window.innerHeight, .2, 1000 );
+				camera.position.set( 0, 0, 80 );		
+				camera.lookAt(0,0,0);
+				var renderer = new THREE.WebGLRenderer( );
+				
+				/*var planeTex = THREE.ImageUtils.loadTexture( 'pics/planeschach.jpg' );
+				planeTexpl.wrapT = THREE.RepeatWrapping;  
+				planeTex.wrapS = THREE.RepeatWrapping;  
+				planeTex.repeat.set( 10, 10 );*/
+				
+		
+				var light = new THREE.PointLight(0xFFFFFF);
+				light.position.set(0,0,0);
+				light.rotation.y = Math.PI/2;
+				scene.add(light);
+				
+				var light2 = new THREE.PointLight(0xFFFFFF);
+				light2.position.set(0,-10,80);
+				scene.add(light2);
+				
+				
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				var material = new THREE.LineBasicMaterial({ color: 0x114CCC });
+				var number = parseInt(funktion.value);
+				var geometry = new THREE.Geometry();
+				var x, y, z;
+			
+					for (var i=0; i<=10000; i++){
+					x = .01*(i-5000);
+					z = 0;
+					y = 0;
+					
+						for (var j = 0; j<=number; j++){
+							
+								if (j!=number){
+									var y1=x;
+									for ( var k =j; k<=number-2; k++){
+										var y1 = y1*x
+									}
+									y1= y1*parseFloat(document.getElementById(String.fromCharCode(97+j) ).value );
+							
+									y += y1;
+								}
+								else 
+								y += parseFloat(document.getElementById(String.fromCharCode(97+j) ).value );
+							}
+						geometry.vertices.push(new THREE.Vector3(x, y, z));
+					};
+			
+				var pointCloud = new THREE.Line(geometry, material);
+				scene.add(pointCloud);	
+				
+				var materialax = new THREE.LineBasicMaterial({  color: 0xffffcc });
+				
+				var Xgeometry = new THREE.Geometry();
+				Xgeometry.vertices.push(
+				new THREE.Vector3( 100, 0, 0 ),
+				new THREE.Vector3( -100, 0, 0 )
+				);
+				
+			
+				var Ygeometry = new THREE.Geometry();
+				Ygeometry.vertices.push(
+				new THREE.Vector3( 0, 50, 0 ),
+				new THREE.Vector3( 0, -50, 0 )
+				);
+			
+
+				var yaxis = new THREE.Line( Ygeometry, materialax );
+				scene.add( yaxis );
+
+				var xaxis = new THREE.Line( Xgeometry, materialax );
+				scene.add( xaxis );
+			
+				var material = new THREE.LineBasicMaterial({ color: 0x114CCC });
+			
+				
+
+				document.body.appendChild( renderer.domElement );
+				var oc = new THREE.OrbitControls( camera, renderer.domElement );
+					
+				var then =( new Date( ) ).getTime( );
+				var time = 0;
+				
+				function render( ) {
+					
+					requestAnimationFrame( render );
+					var now =( new Date( ) ).getTime( );
+					var dt = (now-then)*0.001;
+					then = now;
+					if (dt >1/30)
+						return;
+						
+						
+					
+						
+					renderer.render( scene, camera );
+							
+					}
+				
+					render();
+			
+			}
+			
+		
+			
+		</script>
+
+	</body>
+
+</html>
