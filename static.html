@@ -148,8 +148,8 @@
 			
 				document.getElementById('root').onclick = function(){
 				var n = 1;
-				for (var i=0; i<=10000; i++){
-					var a = .01*(i-5000);
+				for (var i=0; i<=100000; i++){
+					var a = .001*(i-50000);
 					var b = 0;
 					
 						for (var j = 0; j<=number; j++){
@@ -166,7 +166,7 @@
 								else 
 								b += parseFloat(document.getElementById(String.fromCharCode(97+j) ).value );
 							}
-						if ( Math.abs(b) <0.001){
+						if ( Math.abs(b) <0.005){
 							alert ('x' + n + ' =' + a);
 							n++;
 						}
