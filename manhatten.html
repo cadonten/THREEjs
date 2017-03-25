@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Manhatten-Wege
+		</title>
+		<style>
+		
+			#positive {	color = red;
+						}
+			body { 
+				margin : 0;
+			}
+			canvas { 
+				width: 90%; 
+				height: 90% 
+			}
+		</style>
+	</head>
+
+	<body><h4> Wahrscheinlichkeit für Manhatten-Wege in 3x3er Array</h4>
+		<button id = "Calc " onClick = "simulate()">Simulate </button> <br><br>
+		Treffer: <p colo r= 'orange' id = 'positive' > </p>
+		kein Treffer: <p id = 'negative' > </p>
+		Wahrscheinlichkeit: <p id = 'wahrsch'></p>
+		
+		<script src="https://threejs.org/build/three.js">
+		</script>
+		<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+		</script>
+
+		<script>
+		var pos = 0;
+		var neg = 0;
+			
+		function simulate(){
+		
+		for (var round =0; round<=1000000; round++){
+		
+			var check = true;
+			var field = [ [0, 0, 0]	,
+						  [0, 0, 0]	,
+						  [0, 0, 0]
+						];
+						
+			for (var i=0; i<=2; i++){
+				for (var j =0; j<=2;j++){
+				
+					var a = Math.round( Math.random()*8+1 );
+					check = true;
+					
+						for(var k=0; k<=2;k++){
+							for(var l=0;l<=2;l++){
+								if (field[k][l] == a){
+								j=j-1;
+								check = false;
+								break;
+								}
+							}
+						if (check == false)
+							break;
+						}
+						
+				if (check == true){
+					field[i][j]=a;
+				} 
+				
+				}
+			}
+			var n = 1;
+			
+			var test = true;
+			for (var i=0; i<=2;i++){
+				if (i == -1)
+					i = 0;
+					
+				if (test == false || n ==9)
+					break;
+				
+				for (var j=0; j<=2; j++){
+				
+					if (n == 9)
+						break;
+						
+					if ( field[i][j] == n){
+						
+						if (	(i < 2 && field[i+1][j] == n+1 ) || (j < 2 && field[i][j+1] == n+1 ) ||
+								(i > 0 && field[i-1][j] == n+1 ) || (j > 0 && field[i][j-1] == n+1 ) )
+								{
+							n++;
+							i=-1;
+							j=-1;
+							
+							
+							if (n ==9){
+								pos++;
+								document.getElementById('positive').innerHTML = pos;
+								break;
+							}
+							
+							break;
+						}
+						
+						else {
+						
+							test = false;
+							neg++;
+							document.getElementById('negative').innerHTML = neg;
+							break;
+						}
+					}
+				
+				}
+			}
+		
+		}
+		
+		var p = pos/round*100;
+		document.getElementById('wahrsch').innerHTML = p + '%';
+		pos=0;
+		neg=0;
+	}
+			
+		</script>
+
+	</body>
+
+</html>
