@@ -81,12 +81,6 @@
 			earthTx3.wrapS = THREE.RepeatWrapping;
 			earthTx3.repeat.set( 1, 1 );
 			
-			var earthTx4 = THREE.ImageUtils.loadTexture( 'jungle.jpg' );
-					
-			earthTx4.wrapT = THREE.RepeatWrapping;
-			earthTx4.wrapS = THREE.RepeatWrapping;
-			earthTx4.repeat.set( 1, 1 );
-			
 			var snakehead = new THREE.Mesh( new THREE.PlaneGeometry(2, 2), new THREE.MeshPhongMaterial ( { map: earthTx2 } ) ); 
 			snakehead.material.side = THREE.DoubleSide;
 			scene.add(snakehead);
@@ -108,7 +102,7 @@
 			scene.add(food);
 			food.position.set ( 2*Math.round ( Math.random()*30-15 ), 2*Math.round ( Math.random()*30-15 ), 0 );
 			
-			var background = new THREE.Mesh( new THREE.PlaneGeometry(62, 62), new THREE.MeshPhongMaterial ( { map: earthTx4 } ) ); 
+			var background = new THREE.Mesh( new THREE.PlaneGeometry(62, 62), new THREE.MeshPhongMaterial ( {color: 0x000000 } ) ); 
 			background.material.side = THREE.DoubleSide;
 			background.position.z = -.2;
 			scene.add(background);
