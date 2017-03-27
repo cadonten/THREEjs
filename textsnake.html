@@ -75,12 +75,6 @@
 			earthTx2.wrapS = THREE.RepeatWrapping;
 			earthTx2.repeat.set( 1, 1 );
 			
-			var earthTx3 = THREE.ImageUtils.loadTexture( 'maus.jpg' );
-					
-			earthTx3.wrapT = THREE.RepeatWrapping;
-			earthTx3.wrapS = THREE.RepeatWrapping;
-			earthTx3.repeat.set( 1, 1 );
-			
 			var snakehead = new THREE.Mesh( new THREE.PlaneGeometry(2, 2), new THREE.MeshPhongMaterial ( { map: earthTx2 } ) ); 
 			snakehead.material.side = THREE.DoubleSide;
 			scene.add(snakehead);
@@ -101,11 +95,6 @@
 			var food = new THREE.Mesh (  new THREE.SphereGeometry( 1, 32, 32 ), new THREE.MeshBasicMaterial( { color: 0x088A08  } ) );
 			scene.add(food);
 			food.position.set ( 2*Math.round ( Math.random()*30-15 ), 2*Math.round ( Math.random()*30-15 ), 0 );
-			
-			var background = new THREE.Mesh( new THREE.PlaneGeometry(62, 62), new THREE.MeshBasicMaterial ( {color: 0xFFFFFF } ) ); 
-			background.material.side = THREE.DoubleSide;
-			background.position.z = -.2;
-			scene.add(background);
 			
 			var points = 0;
 			var x = 1;
