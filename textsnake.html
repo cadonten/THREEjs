@@ -69,8 +69,14 @@
 			earthTx.wrapS = THREE.RepeatWrapping;
 			earthTx.repeat.set( 1, 1 );
 			
+			var earthTx2 = THREE.ImageUtils.loadTexture( 'schlange2.jpg' );
+					
+			earthTx2.wrapT = THREE.RepeatWrapping;
+			earthTx2.wrapS = THREE.RepeatWrapping;
+			earthTx2.repeat.set( 1, 1 );
 			
-			var snakehead = new THREE.Mesh( new THREE.PlaneGeometry(2, 2), new THREE.MeshPhongMaterial ( { map: earthTx } ) ); 
+			
+			var snakehead = new THREE.Mesh( new THREE.PlaneGeometry(2, 2), new THREE.MeshPhongMaterial ( { map: earthTx2 } ) ); 
 			snakehead.material.side = THREE.DoubleSide;
 			scene.add(snakehead);
 			Segments.push(snakehead);
