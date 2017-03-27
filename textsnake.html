@@ -98,11 +98,11 @@
 			seg2.position.set(0, 0,0);
 			Segments.push(seg2);
 			
-			var food = new THREE.Mesh (  new THREE.SphereGeometry( 1, 32, 32 ), new THREE.MeshPhongMaterial( { map:earthTx3 } ) );
+			var food = new THREE.Mesh (  new THREE.SphereGeometry( 1, 32, 32 ), new THREE.MeshBasicMaterial( { 0x088A08  } ) );
 			scene.add(food);
 			food.position.set ( 2*Math.round ( Math.random()*30-15 ), 2*Math.round ( Math.random()*30-15 ), 0 );
 			
-			var background = new THREE.Mesh( new THREE.PlaneGeometry(62, 62), new THREE.MeshBasicMaterial ( {color: 0x000000 } ) ); 
+			var background = new THREE.Mesh( new THREE.PlaneGeometry(62, 62), new THREE.MeshBasicMaterial ( {color: 0xFFFFFF } ) ); 
 			background.material.side = THREE.DoubleSide;
 			background.position.z = -.2;
 			scene.add(background);
