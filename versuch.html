@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Tiny Crypt
+		</title>
+		<style>
+		
+		</style>
+			
+			
+	</head>
+
+	<body>
+	
+		<input id = "input"></input>
+		<button id = "calc" onclick= "calc()">Calc</button>
+		<p> Bin-Code</p>
+		<p id ='binout'> </p>
+		<p> Reversed Bin-Code</p>
+		<p id ='binin'> </p>
+		<p> Transscript</p>
+		<p id ='stringout'> </p>
+		<script>
+		
+		function calc (){
+		
+		var string = document.getElementById('input').value
+		var output = " ";
+		var revBin = " ";
+		var tranScr = " ";
+		var a = 0;
+		var finale = " ";
+			for (var i = 0; i<= string.length-1; i++){
+			
+				output += string[i].charCodeAt(0).toString(2) + " " ;
+			}
+			
+		document.getElementById('binout').innerHTML = output;
+		revBin = "";
+			for (var i = 0; i<=output.length-1; i++){
+				
+				if ( output[i] == " ")
+					revBin += " ";
+				
+				else if ( output[i] == 1)
+					revBin += 0;
+				else if ( output[i] == 0)
+					revBin += 1;
+					
+			}
+		document.getElementById('binin').innerHTML = revBin;
+				
+				for (var i = 0; i<=string.length-1; i++){
+					
+					var bit = " ";
+					
+					for (var j=a; j<= revBin.length-1; j++){
+						
+						
+						if (revBin[j] != " "){
+							
+							
+							if (revBin[j] == 1 || revBin[j] == 0){
+								bit += revBin[j];
+							}
+							if (bit.length >= 8){
+								a = a+8;
+								break;
+							}
+						}
+						else 
+							continue;
+					}
+					
+					
+					var intrstep = parseInt(bit, 2).toString(10);
+					intrstep = parseInt(intrstep);
+					transScr = String.fromCharCode(intrstep);
+					finale += transScr;
+					document.getElementById('stringout').innerHTML = finale;
+				}
+		
+		}
+		
+		
+		
+		
+		
+		</script>
+		
+	</body>
+	
+</html>
