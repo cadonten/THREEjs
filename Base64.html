@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset=utf-8>
+		<title>
+			Base64-Encoder/Decoder
+		</title>
+		<style>
+		
+		</style>
+			
+			
+	</head>
+
+	<body>
+	
+		<h4> Base64-Encoder</h4>
+		<input id = "input"></input>
+		<button id = "calc" onclick= "calc()">Encode</button>
+		<p> Transcript:</p>
+		<p id ='stringout'> </p>
+		
+		<br>
+		<br>
+		<br>
+		<h4> Base64-Decoder</h4>
+		<input id = "input2"></input>
+		<button id = "translate" onclick= "retranslate()">Decode</button>
+		<p> Transcript:</p>
+		<p id ='newout'> </p>
+		<script>
+		
+		function calc (){
+		
+		var string = document.getElementById('input').value
+		var output = " ";
+		var revBin = " ";
+		var tranScr = " ";
+		var a = 0;
+		var finale = " ";
+		
+			for (var i = 0; i<= string.length-1; i++){
+				
+				var tempbin = string[i].charCodeAt(0).toString(2)
+					
+					if ( tempbin.length < 8){
+						var tempcalc = "";
+							for (var k = 0; k<=8-tempbin.length-1; k++){
+								tempcalc += 0;
+							}
+						tempcalc += tempbin;
+					}
+				output += tempcalc ; 
+			}
+				
+			
+			
+		var frame = 0;	
+		var unit = ""
+		var helpZ = ""
+		var except = false;
+				
+			for (var i = frame; i <= output.length; i++){
+				
+				if ( i == output.length && i/6 != Math.round(i/6) ){
+					
+					if (i-p < 2)
+						return;
+						
+					for (var j = 0; j<=i-p; j++)	// berechnung der fehlenden Nullen und addition an Binär-rumpf
+						helpZ += 0; 
+					
+					helpZ +=unit
+					unit = helpZ;
+					helpZ = "";
+					except = true;					// damit wir in die schreibfunktion kommen
+										
+					
+				}	
+				
+				if (output[i] == " ") //ignoriere leerzeichen am anfang, dadurch brauchts kein length-1
+					continue;
+				
+				if (i != output.length  || except == true){
+					
+					if (except == false)  // nur wenn ende der kette nicht erreicht ist, da hier schon kompletter binärcode in unit steht
+					unit += output[i];
+				
+					if (i/6 == Math.round(i/6) || except == true ){   // nur wenn i 6 ist oder ende der kette erreicht wurde, damit auch das noch geprintet wird
+				
+						var intrstep = parseInt(unit, 2).toString(10);	
+						
+						document.getElementById('stringout').innerHTML += translate(intrstep);  // schreibe Zahlencode in Datei
+						unit = ""
+						var p = i;
+						except = false;
+					}
+					
+				}
+				
+			}
+	}
+	
+
+		function translate (Wert){
+		
+			if ( Wert == 62)
+				return "+";
+				
+			else if (Wert == 63)
+				return "/";
+			
+			else if (Wert <= 25){
+				
+				Wert = parseInt(Wert) + parseInt(65);
+				return String.fromCharCode(Wert);
+				
+			}
+			
+			else if ( Wert > 25 && Wert <= 51){
+				
+				Wert = parseInt(Wert) + parseInt(71);
+				return String.fromCharCode(Wert);
+			}
+			
+			else if ( Wert > 51 && Wert < 62){
+				
+				Wert = parseInt(Wert) - parseInt(4);
+				return String.fromCharCode(Wert);
+			}
+		
+		}
+	
+		
+		
+		function retranslate(){
+		
+			var transcript = document.getElementById('input2').value
+			var bincode = "";
+			var wholecode = "";
+				for (var i = 0; i <= transcript.length-1; i++){
+				
+					var dezN = transcript[i].charCodeAt(0);
+						
+						if ( dezN <= 90 && dezN >=65)
+							dezN = parseInt(dezN)-parseInt(65);
+						
+								
+						else if ( dezN <= 122 && dezN >=97)
+							dezN = parseInt(dezN)-parseInt(71);
+							
+						else if ( dezN <= 57 && dezN >= 48)
+							dezN = parseInt(dezN) + parseInt(4);	
+						
+						else if ( dezN == 47)
+							dezN = 62;
+						
+						else if ( dezN == 43)
+							dezN = 63;
+						
+						bincode = dezN.toString(2);
+						
+						if (bincode.length < 6){
+							
+							var zeros = "";
+							for (var j = 1; j<= 6-bincode.length; j++){
+								zeros += 0;
+							}
+							zeros = zeros + bincode;
+							bincode = zeros;
+						}
+				
+					wholecode = wholecode + bincode;
+				}
+		
+			binToString(wholecode);
+		}
+		
+		function binToString(bin){
+		
+		var frame = 0;
+			if ( bin.length/8 != Math.round(bin.length/8) ){
+			
+				var nZ = bin.length%8;
+				var bincorrect = "";
+				
+				for ( var i = 0; i<= bin.length-1; i++){
+				
+					if ( i >= bin.length-(6-nZ) || i < (bin.length)-6) 
+					bincorrect = bincorrect + bin[i];
+					
+				
+				}
+				bin = bincorrect;
+			}
+			var result = "";
+			
+			for ( var i = frame;  i< bin.length; i++){
+			
+				result += bin[i];
+				if (result.length == 8){
+				
+					result = parseInt(result, 2).toString(10);
+					result = String.fromCharCode(result);
+					document.getElementById('newout').innerHTML += result; 
+					result = "";
+				}
+			}
+		
+		}
+		
+		
+		</script>
+		
+	</body>
+	
+</html>
