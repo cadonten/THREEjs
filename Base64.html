@@ -32,6 +32,8 @@
 		
 		function calc (){
 		
+		document.getElementById('stringout').innerHTML ="";
+		
 		var string = document.getElementById('input').value
 		var output = " ";
 		var revBin = " ";
@@ -99,6 +101,8 @@
 				}
 				
 			}
+		
+	
 	}
 	
 
@@ -129,12 +133,12 @@
 				return String.fromCharCode(Wert);
 			}
 		
-		}
+	}
 	
 		
 		
 		function retranslate(){
-		
+			document.getElementById('newout').innerHTML ="";
 			var transcript = document.getElementById('input2').value
 			var bincode = "";
 			var wholecode = "";
